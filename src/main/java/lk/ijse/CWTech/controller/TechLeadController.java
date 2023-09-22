@@ -26,12 +26,31 @@ public class TechLeadController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseUtil saveTechLead(@ModelAttribute TechLeadDTO techLeadDTO){
+        if(techLeadDTO.getTechLeadId()==null || !techLeadDTO.getTechLeadId().matches("\"^(T)[-]?[0-9]{3}$\"")){
+            throw new RuntimeException("Invalid id");
+        }else if(techLeadDTO.getName()==null || !techLeadDTO.getName().matches("^[A-z ]{5,30}$")){
+            throw new RuntimeException("Invalid name");
+        }else if(techLeadDTO.getAddress()==null || !techLeadDTO.getAddress().matches("^[A-z 0-9 \\/\\,]{2,50}[A-z 0-9]{1,50}$")){
+            throw new RuntimeException("Invalid address");
+        }else if(techLeadDTO.getSalary() == 0){
+            throw new RuntimeException("Invalid salary");
+        }
+
         techLeadService.saveTechLead(techLeadDTO);
         return new ResponseUtil(200,"Success",techLeadDTO);
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseUtil updateTechLead(@RequestBody TechLeadDTO techLeadDTO){
+
+        if(techLeadDTO.getName()==null || !techLeadDTO.getName().matches("^[A-z ]{5,30}$")){
+            throw new RuntimeException("Invalid name");
+        }else if(techLeadDTO.getAddress()==null || !techLeadDTO.getAddress().matches("^[A-z 0-9 \\/\\,]{2,50}[A-z 0-9]{1,50}$")){
+            throw new RuntimeException("Invalid address");
+        }else if(techLeadDTO.getSalary() == 0){
+            throw new RuntimeException("Invalid salary");
+        }
+
         techLeadService.updateTechLead(techLeadDTO);
         return new ResponseUtil(200,"Success",techLeadDTO);
     }
